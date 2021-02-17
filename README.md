@@ -1,2 +1,2 @@
 # Trippy
-A basic volume control effect plug-in with IGraphics GUI
+Transient detection algorithm with extra steps :)

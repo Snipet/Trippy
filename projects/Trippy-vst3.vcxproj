@@ -377,6 +377,7 @@
     <ClInclude Include="..\..\..\Q Lib Stipped\zero_crossing.hpp" />
     <ClInclude Include="..\ADSRf.h" />
     <ClInclude Include="..\IADSR.h" />
+    <ClInclude Include="..\ICustomDisplay.h" />
     <ClInclude Include="..\IDistortDisplay.h" />
     <ClInclude Include="..\iLFOG.h" />
     <ClInclude Include="..\TransientProcessor.h" />

@@ -503,6 +503,7 @@
     </ClInclude>
     <ClInclude Include="..\iLFOG.h" />
     <ClInclude Include="..\IDistortDisplay.h" />
+    <ClInclude Include="..\ICustomDisplay.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="resources">

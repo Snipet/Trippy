@@ -9,7 +9,7 @@
 #include "IDistortDisplay.h"
 #include "IControls.h"
 #include "IPlugPaths.h"
-
+#include "ICustomDisplay.h"
 const int kNumPresets = 1;
 
 enum EParams
@@ -22,6 +22,7 @@ enum EParams
   kDistortMix,
   kFilterMix,
   kVolumeMix,
+  kVolumeFoo,
   kNumParams
 };
 
@@ -30,6 +31,8 @@ enum EControlTags
   kLedTrigger = 0,
   kEnvPlot,
   kDistortPlot,
+  kDriveKnob,
+  kVolumeDisplay,
   kCtrlTags
 };
 
@@ -49,11 +52,13 @@ public:
 private:
   ISender<1> mDistortSender;
   ISender<1> mEnvSender;
+  ISender<1> mDisplaySender;
   //ISenderData<1> mLastOutputData = { kDistortPlot, 1, 0 };
   ISenderData<1> mEnvLastOutput = { kEnvPlot, 1, 0 };
   TransientProcessor* t;
   ADSRM* adsr;
   double env;
+  int page;
 };
 
 

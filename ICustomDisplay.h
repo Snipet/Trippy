@@ -26,9 +26,9 @@ public:
   void setPoints() {
     mPoints.resize(100);
     temp.resize(100);
-    temp[0] = add/3;
-    for (int i = 1; i < 100; i++) {
-      temp[i] = mPoints[i - 1];
+    temp[99] = add;
+    for (int i = 0; i < 99; i++) {
+      temp[i] = mPoints[i + 1];
     }
     mPoints = temp;
   }

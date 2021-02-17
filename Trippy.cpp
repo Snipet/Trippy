@@ -14,7 +14,7 @@ Trippy::Trippy(const InstanceInfo& info)
 {
   GetParam(kAttack)->InitDouble("Attack", 10., 0., 10000., 0.01, "ms", 0, "", IParam::ShapePowCurve(3.));
   GetParam(kDecay)->InitDouble("Decay", 200., 0., 10000., 0.01, "ms", 0, "", IParam::ShapePowCurve(3.));
-  GetParam(kSustain)->InitDouble("Sustain", 0.5, 0., 1, 0.01, "", 0, "", IParam::ShapePowCurve(3.));
+  GetParam(kSustain)->InitDouble("Sustain", 0.0, 0., 1, 0.01);
 
   GetParam(kDistortMix)->InitDouble("Distortion Mix", 0., 0., 100., 0.01, "%");
   GetParam(kFilterMix)->InitDouble("Filter Mix", 0., 0., 100., 0.01, "%");
@@ -91,7 +91,6 @@ Trippy::Trippy(const InstanceInfo& info)
   
   };
 #endif
-  env = 0;
   t = new TransientProcessor[NOutChansConnected()];
   adsr = new ADSRM[NOutChansConnected()];
   for (int i = 0; i < NOutChansConnected(); i++) {
@@ -102,6 +101,7 @@ Trippy::Trippy(const InstanceInfo& info)
 #if IPLUG_DSP
 void Trippy::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
 {
+  double env = 0;
   const int nChans = NOutChansConnected();
   const double gainMix = GetParam(kVolumeMix)->Value() / 100.;
   const double distortionMix = GetParam(kDistortMix)->Value() / 8.;
@@ -138,7 +138,7 @@ void Trippy::OnParamChange(int paramIdx) {
 
   case kAttack:
     for (int i = 0; i < NOutChansConnected(); i++) {
-      adsr[i].setAttack(GetParam(kAttack)->Value());
+      adsr[i].setAttack(GetParam(kAttack)->Value() * GetSampleRate() / 1000);
     }
     break;
   case kDecay:
@@ -148,7 +148,7 @@ void Trippy::OnParamChange(int paramIdx) {
     break;
   case kSustain:
     for (int i = 0; i < NOutChansConnected(); i++) {
-      adsr[i].setSustain(GetParam(kSustain)->Value() * GetSampleRate() / 1000);
+      adsr[i].setSustain(GetParam(kSustain)->Value());
     }
     break; 
   }

@@ -21,7 +21,12 @@ public:
   
       }
       else {
-        return LinearInterpolate(1, sustain, (point-attack) / (decay));
+        if (point < attack + decay) {
+          return LinearInterpolate(1, sustain, (point - attack) / (decay));
+        }
+        else {
+          return sustain;
+        }
       }
     }
     else {
@@ -34,11 +39,16 @@ public:
   void setDecay(float d) {
     decay = d;
   }
-  void setSustain(float s) {
+  void setSustain(double s) {
     sustain = s;
   }
   double getPoint() {
-    return point / (attack + decay);
+    if (point < attack + decay) {
+      return point / (attack + decay);
+    }
+    else {
+      return 1;
+    }
   }
 
   double LinearInterpolate(

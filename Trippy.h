@@ -57,7 +57,6 @@ private:
   ISenderData<1> mEnvLastOutput = { kEnvPlot, 1, 0 };
   TransientProcessor* t;
   ADSRM* adsr;
-  double env;
   int page;
 };
 

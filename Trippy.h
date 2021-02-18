@@ -10,6 +10,8 @@
 #include "IControls.h"
 #include "IPlugPaths.h"
 #include "ICustomDisplay.h"
+#include "BiquadFilterf.h"
+#include "IFilterDisplay.h"
 const int kNumPresets = 1;
 
 enum EParams
@@ -23,6 +25,9 @@ enum EParams
   kFilterMix,
   kVolumeMix,
   kVolumeFoo,
+  kCutoff,
+  kReso,
+  kFilterFoo,
   kNumParams
 };
 
@@ -33,6 +38,7 @@ enum EControlTags
   kDistortPlot,
   kDriveKnob,
   kVolumeDisplay,
+  kFilterDisplay,
   kCtrlTags
 };
 
@@ -50,12 +56,14 @@ public:
 
 
 private:
+  IBufferSender<1> mFilterSender;
   ISender<1> mDistortSender;
   ISender<1> mEnvSender;
   ISender<1> mDisplaySender;
   //ISenderData<1> mLastOutputData = { kDistortPlot, 1, 0 };
   ISenderData<1> mEnvLastOutput = { kEnvPlot, 1, 0 };
   TransientProcessor* t;
+  Filter* f;
   ADSRM* adsr;
   int page;
 };
@@ -64,9 +72,6 @@ private:
 
 /*
 TODO / Good Ideas:
-
--For the routing table matrix thing, just do a few rows of effects and have a moduation amount to the env for how much it is modulated.
-
 
 
 

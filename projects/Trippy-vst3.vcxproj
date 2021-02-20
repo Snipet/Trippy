@@ -376,6 +376,7 @@
     <ClInclude Include="..\..\..\Q Lib Stipped\waveshaper.hpp" />
     <ClInclude Include="..\..\..\Q Lib Stipped\zero_crossing.hpp" />
     <ClInclude Include="..\ADSRf.h" />
+    <ClInclude Include="..\BiQuadCoeffs.h" />
     <ClInclude Include="..\BiquadFilterf.h" />
     <ClInclude Include="..\IADSR.h" />
     <ClInclude Include="..\ICustomDisplay.h" />

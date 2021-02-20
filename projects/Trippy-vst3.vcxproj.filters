@@ -506,6 +506,7 @@
     <ClInclude Include="..\ICustomDisplay.h" />
     <ClInclude Include="..\BiquadFilterf.h" />
     <ClInclude Include="..\IFilterDisplay.h" />
+    <ClInclude Include="..\BiQuadCoeffs.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="resources">

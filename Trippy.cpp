@@ -1,19 +1,14 @@
 #include "Trippy.h"
 #include "IPlug_include_in_plug_src.h"
 #include "IControls.h"
-#include "lowpass.hpp"
 #include "cmath"
-
-namespace q = cycfi::q;
-using namespace q::literals;
-
 
 
 Trippy::Trippy(const InstanceInfo& info)
 : Plugin(info, MakeConfig(kNumParams, kNumPresets))
 {
-  GetParam(kAttack)->InitDouble("Attack", 10., 0., 10000., 0.01, "ms", 0, "", IParam::ShapePowCurve(3.));
-  GetParam(kDecay)->InitDouble("Decay", 200., 0., 10000., 0.01, "ms", 0, "", IParam::ShapePowCurve(3.));
+  GetParam(kAttack)->InitDouble("Attack", 10., 0.01, 10000., 0.01, "ms", 0, "", IParam::ShapePowCurve(3.));
+  GetParam(kDecay)->InitDouble("Decay", 200., 0.01, 10000., 0.01, "ms", 0, "", IParam::ShapePowCurve(3.));
   GetParam(kSustain)->InitDouble("Sustain", 0.0, 0., 1, 0.01);
 
   GetParam(kDistortMix)->InitDouble("Distortion Mix", 0., 0., 100., 0.01, "%");
@@ -21,8 +16,10 @@ Trippy::Trippy(const InstanceInfo& info)
   GetParam(kVolumeMix)->InitDouble("Volume Mix", 0., 0., 100., 0.01, "%");
 
   GetParam(kDrive)->InitDouble("Drive", 0., 0., 1, 0.001, "");
-  GetParam(kCutoff)->InitDouble("Cutoff", 15000., 5., 15000, 0.1, "", 0, "", IParam::ShapePowCurve(2.));
+  GetParam(kCutoff)->InitDouble("Cutoff", 22000, 5., 22000, 0.1, "", 0, "", IParam::ShapePowCurve(5.));
   GetParam(kReso)->InitDouble("Reso", 0.707, 0.1, 15, 0.1, "", 0, "", IParam::ShapePowCurve(2.));
+
+  GetParam(kVolumeGain)->InitDouble("Gain", 100., 0., 200., 0.01, "", 0, "", IParam::ShapePowCurve(1.5));
 
 #if IPLUG_EDITOR // http://bit.ly/2S64BDd
   mMakeGraphicsFunc = [&]() {
@@ -53,7 +50,8 @@ Trippy::Trippy(const InstanceInfo& info)
       pGraphics->HideControl(kVolumeFoo, false);
       pGraphics->HideControl(kDrive, true);
       pGraphics->HideControl(kCutoff, true);
-      pGraphics->HideControl(kFilterFoo, true);
+      pGraphics->HideControl(kReso, true);
+      pGraphics->HideControl(kVolumeGain, false);
      page = 1;
     };
 
@@ -61,7 +59,8 @@ Trippy::Trippy(const InstanceInfo& info)
       pGraphics->HideControl(kVolumeFoo, true);
       pGraphics->HideControl(kDrive, false);
       pGraphics->HideControl(kCutoff, true);
-      pGraphics->HideControl(kFilterFoo, true);
+      pGraphics->HideControl(kReso, true);
+      pGraphics->HideControl(kVolumeGain, true);
       page = 0;
     };
 
@@ -69,7 +68,8 @@ Trippy::Trippy(const InstanceInfo& info)
       pGraphics->HideControl(kVolumeFoo, true);
       pGraphics->HideControl(kDrive, true);
       pGraphics->HideControl(kCutoff, false);
-      pGraphics->HideControl(kFilterFoo, false);
+      pGraphics->HideControl(kReso, false);
+      pGraphics->HideControl(kVolumeGain, true);
       page = 2;
     };
 
@@ -95,11 +95,14 @@ Trippy::Trippy(const InstanceInfo& info)
     pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(75).GetHShifted(-240).GetVShifted(0), kCutoff, "", style));
     pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(75).GetHShifted(-110).GetVShifted(0), kReso, "", style));
 
+    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(75).GetHShifted(-240).GetVShifted(0), kVolumeGain, "", style));
+
     pGraphics->AttachControl(new IDistortDisplay(IRECT(0, 50, 480, 250), { kDrive, kDistortMix }), kDistortPlot);
     pGraphics->AttachControl(new ICustomDisplay(IRECT(0, 50, 480, 250), kVolumeFoo), kVolumeDisplay);
-    pGraphics->AttachControl(new IFilterDisplay(IRECT(0, 50, 480, 250), kFilterFoo), kFilterDisplay);
-    pGraphics->HideControl(kVolumeFoo, true);
+    pGraphics->AttachControl(new IFilterDisplay(IRECT(0, 50, 480, 250), {kCutoff, kReso, kFilterMix}), kFilterDisplay);
     pGraphics->HideControl(kCutoff, true);
+    pGraphics->HideControl(kReso, true);
+    pGraphics->HideControl(kDrive, true);
     pGraphics->HideControl(kFilterFoo, true);
 
 
@@ -109,11 +112,11 @@ Trippy::Trippy(const InstanceInfo& info)
   
   };
 #endif
-  t = new TransientProcessor[NOutChansConnected()];
-  adsr = new ADSRM[NOutChansConnected()];
   f = new Filter[NOutChansConnected()];
+  lastCutoff = new double[NOutChansConnected()];
+  lastReso = new double[NOutChansConnected()];
   for (int i = 0; i < NOutChansConnected(); i++) {
-    f[i].set(15000, 2, GetSampleRate());
+    f[i].set(15000, 2, GetSampleRate(), 0);
   }
 
 }
@@ -129,22 +132,32 @@ void Trippy::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   const double drive = GetParam(kDrive)->Value() * 10;
   const double cutoff = GetParam(kCutoff)->Value();
   const double reso = GetParam(kReso)->Value();
+  const double gain = GetParam(kVolumeGain)->Value();
+
+
   for (int s = 0; s < nFrames; s++) {
+    if (t.detect((inputs[0][s] + inputs[1][s]) / 2)) {
+      adsr.retrigger();
+    }
+    env = adsr.tick();
     for (int c = 0; c < nChans; c++) {
-      if (t[c].detect(inputs[c][s])) {
-        adsr[c].retrigger();
-      }
-      env = adsr[c].tick();
       double process = inputs[c][s];
       if (gainMix != 0) {
-        process = process * env * gainMix + process * (1 - gainMix);
+        process = process * env * gainMix + process * (1 - gainMix) * gain;
       }
 
-      //if (distortionMix > 0) {
       process = tanh(process * (((env) * distortionMix + drive) + 1));
-      //}
-      //f[c].set(5000, 2, 44100);
-      f[c].set(cutoff + env*filterMix*17000, reso, GetSampleRate());
+  
+
+
+      double a = (exp((4 * env * filterMix - 4)) - 0.013);
+      double nCutoff = cutoff + a * 17000;
+      if (lastCutoff[c] != nCutoff || lastReso[c] != reso) {
+        f[c].set(nCutoff, reso, GetSampleRate(), 0);
+      }
+      lastCutoff[c] = nCutoff;
+      lastReso[c] = reso;
+
       process = f[c].tick(process);
 
       outputs[c][s] = process;
@@ -154,10 +167,10 @@ void Trippy::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
  // mLastOutputData.vals[0] = (float)env;
  // mEnvLastOutput.vals[0] = (float)adsr[0].getPoint();
   mDistortSender.PushData({ kDistortPlot, {float(env)} });
-  mEnvSender.PushData({ kEnvPlot, {float(adsr[0].getPoint()) } });
+  mEnvSender.PushData({ kEnvPlot, {float(adsr.getPoint()) } });
+  mFilterSender.PushData({ kFilterDisplay, {float(env)} });
   mDisplaySender.PushData({ kVolumeDisplay, {float(env)} });
-  sample** s[5] = { 0,0,0,0,0 };
-  mFilterSender.ProcessBlock(*s, 5, kFilterDisplay);
+  //sample** s[5] =  { 0.,0,0,0,0 };
 }
 
 void Trippy::OnParamChange(int paramIdx) {
@@ -165,17 +178,17 @@ void Trippy::OnParamChange(int paramIdx) {
 
   case kAttack:
     for (int i = 0; i < NOutChansConnected(); i++) {
-      adsr[i].setAttack(GetParam(kAttack)->Value() * GetSampleRate() / 1000);
+      adsr.setAttack(GetParam(kAttack)->Value() * GetSampleRate() / 1000);
     }
     break;
   case kDecay:
     for (int i = 0; i < NOutChansConnected(); i++) {
-      adsr[i].setDecay(GetParam(kDecay)->Value()*GetSampleRate() / 1000);
+      adsr.setDecay(GetParam(kDecay)->Value()*GetSampleRate() / 1000);
     }
     break;
   case kSustain:
     for (int i = 0; i < NOutChansConnected(); i++) {
-      adsr[i].setSustain(GetParam(kSustain)->Value());
+      adsr.setSustain(GetParam(kSustain)->Value());
     }
     break;
   case kCutoff:
@@ -192,7 +205,7 @@ void Trippy::OnParamChange(int paramIdx) {
   }
  
 }
-
+ 
 void Trippy::OnIdle() {
   mDistortSender.TransmitData(*this);
   mEnvSender.TransmitData(*this);

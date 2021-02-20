@@ -28,6 +28,8 @@ enum EParams
   kCutoff,
   kReso,
   kFilterFoo,
+  kFilterType,
+  kVolumeGain,
   kNumParams
 };
 
@@ -56,16 +58,20 @@ public:
 
 
 private:
-  IBufferSender<1> mFilterSender;
+  ISender<1> mFilterSender;
   ISender<1> mDistortSender;
   ISender<1> mEnvSender;
-  ISender<1> mDisplaySender;
+  ISender<2> mDisplaySender;
   //ISenderData<1> mLastOutputData = { kDistortPlot, 1, 0 };
   ISenderData<1> mEnvLastOutput = { kEnvPlot, 1, 0 };
-  TransientProcessor* t;
+  ISenderData<1> mFilterLastOutput = { kFilterDisplay, 1, 0 };
+  TransientProcessor t;
   Filter* f;
-  ADSRM* adsr;
+  ADSRM adsr;
   int page;
+
+  double* lastCutoff;
+  double* lastReso;
 };
 
 

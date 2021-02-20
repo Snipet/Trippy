@@ -28,7 +28,7 @@ public:
     double x = -0.5;
     for (int i = 0; i < 100; i++) {
       x += 0.01;
-      mPoints[i] = tanh(30 * (GetValue(0)+0.1) * x * ((add * GetValue(1)) + 0.1))/2 + 0.5;
+      mPoints[i] = tanh(60 * (GetValue(0)+0.2) * x * ((add * GetValue(1)) + 0.3))/2 + 0.5;
     }
   }
   void OnMsgFromDelegate(int msgTag, int dataSize, const void* pData) override {

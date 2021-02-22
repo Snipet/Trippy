@@ -3,7 +3,10 @@
 #define PI 3.14159265358979323846264
 
 
-void getCoefs(double (&coeffs)[5], double cutoff, double q, int type, double fs) {
+
+
+
+void getCoefs(double (&coeffs)[5], double cutoff, double q, int type, double fs, double fgain) {
   double c = cutoff;
   if (cutoff > 22000) {
     c = 22000;
@@ -13,8 +16,10 @@ void getCoefs(double (&coeffs)[5], double cutoff, double q, int type, double fs)
   }
   double omega = 2 * PI * c / fs;
   double sn = sin(omega);
+  //double sn = q::detail::sin_gen(q::phase(omega*360));
   double cs = cos(omega);
   double alpha = sn / (2. * q);
+  double gain_abs = pow(10, fgain / 40);
   double a0;
   switch (type) {
 
@@ -47,6 +52,25 @@ void getCoefs(double (&coeffs)[5], double cutoff, double q, int type, double fs)
     coeffs[4] = 1 - alpha;
     break;
 
+  case 3:
+    //Notch
+    coeffs[0] = 1;
+    coeffs[1] = -2 * cs;
+    coeffs[2] = 1;
+    a0 = 1 + alpha;
+    coeffs[3] = -2 * cs;
+    coeffs[4] = 1 - alpha;
+    break;
+
+  case 4:
+    //Peak
+    coeffs[0] = 1 + (alpha * gain_abs);
+    coeffs[1] = -2 * cs;
+    coeffs[2] = 1 - (alpha * gain_abs);
+    a0 = 1 + (alpha / gain_abs);
+    coeffs[3] = -2 * cs;
+    coeffs[4] = 1 - (alpha / gain_abs);
+    break;
   }
 
 

@@ -17,12 +17,8 @@ public:
   IFilterDisplay(const IRECT& bounds, const std::initializer_list<int>& params)
     : IControl(bounds, params) {
     setPoints();
-    b0 = 0;
-    b1 = 0;
-    b2 = 0;
-    a1 = 0;
-    a2 = 0;
     reso = 2;
+    div = 1;
   }
   void Draw(IGraphics& g) override {
     setPoints();
@@ -38,7 +34,7 @@ public:
     double freq = 200;
     for (int i = 0; i < 200; i++) {
       std::complex<double> z = getz(freq);
-      double x = zdomain(z) / 2;
+      double x = zdomain(z) / div;
 
       mPoints[i] = x;
       freq += 100;
@@ -51,20 +47,34 @@ public:
       int pos = 0;
       ISenderData<MAXNC> d;
       pos = stream.Get(&d, pos);
-      cutoff = (GetValue(2) - 0.5) * d.vals[0] * 20000 + (GetValue(0) * 12000 + 6000);
-      reso = GetValue(1) * 10 + 0.1;
-      if (cutoff > 18000) {
-        cutoff = 18000;
+      switch (int(round(GetValue(3) * 4))) {
+      case 0:
+        cutoff = (GetValue(2) - 0.5) * d.vals[0] * 20000 + (GetValue(0) * 12000 + 6000);
+        reso = GetValue(1) * 5 + 0.1;
+        div = 1.3;
+        break;
+      case 1:
+        cutoff = (GetValue(2) - 0.5) * d.vals[0] * 20000 + (GetValue(0) * 15000 + 3000);
+        reso = GetValue(1) * 5 + 0.1;
+        div = 1.3;
+        break;
+      case 2:
+        cutoff = (GetValue(2) - 0.5) * d.vals[0] * 20000 + (GetValue(0) * 12000 + 6000);
+        reso = GetValue(1) * 5 + 0.1;
+        div = 0.2;
+      default:
+        cutoff = (GetValue(2) - 0.5) * d.vals[0] * 20000 + (GetValue(0) * 19000 + 1000);
+        div = 1.5;
+        reso = GetValue(1) * 5 + 0.1;
+        break;
       }
-      if (cutoff < 50) {
-        cutoff = 50;
-      }
+
       SetDirty(false);
     }
   }
 
   double zdomain(std::complex<double> &z) {
-    getCoefs(coeffs, cutoff, reso, 0, 44100);
+    getCoefs(coeffs, cutoff, reso, round(GetValue(3) * 4), 44100, GetValue(4) * 40 - 20); 
 
     std::complex<double> yeet = ((coeffs[0] + coeffs[1] / z + (coeffs[2] / z) * (coeffs[2] / z)) / (1. + coeffs[3] / z + (coeffs[4] / z) * (coeffs[4] / z)));
     return yeet.real();
@@ -79,12 +89,7 @@ private:
   std::vector<float> mPoints;
   std::vector<float> temp;
   double coeffs[5];
-  double b0;
-  double b1;
-  double b2;
-  double a0;
-  double a1;
-  double a2;
   double cutoff;
   double reso;
+  double div;
 };

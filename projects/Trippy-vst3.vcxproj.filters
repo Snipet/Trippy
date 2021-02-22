@@ -134,6 +134,21 @@
     <ClCompile Include="..\..\..\IGraphics\IGraphicsEditorDelegate.cpp">
       <Filter>IGraphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\kfr-master\include\kfr\dft\impl\convolution-impl.cpp">
+      <Filter>KFR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\kfr-master\include\kfr\dft\impl\dft-impl-f32.cpp">
+      <Filter>KFR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\kfr-master\include\kfr\dft\impl\dft-impl-f64.cpp">
+      <Filter>KFR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\kfr-master\include\kfr\dft\impl\fft-impl-f32.cpp">
+      <Filter>KFR</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\kfr-master\include\kfr\dft\impl\fft-impl-f64.cpp">
+      <Filter>KFR</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../config.h" />
@@ -444,9 +459,6 @@
     <ClInclude Include="..\..\..\Q Lib Stipped\fractional_ring_buffer.hpp">
       <Filter>Q</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Q Lib Stipped\fft.hpp">
-      <Filter>Q</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Q Lib Stipped\feature_detection.hpp">
       <Filter>Q</Filter>
     </ClInclude>
@@ -507,6 +519,127 @@
     <ClInclude Include="..\BiquadFilterf.h" />
     <ClInclude Include="..\IFilterDisplay.h" />
     <ClInclude Include="..\BiQuadCoeffs.h" />
+    <ClInclude Include="..\IconsForkAwesome.h" />
+    <ClInclude Include="..\IconsFontaudio.h" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\all.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\basic_expressions.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\conversion.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\expression.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\filter.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\fraction.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\function_expressions.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\generators.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\memory.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\pointer.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\random.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\reduce.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\small_buffer.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\sort.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\univector.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\array.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\cstring.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\ctti.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\function.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\memory.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\named_arg.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\numeric.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\range.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\result.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\string.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\tuple.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\cache.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\convolution.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\fft.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\reference_dft.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\impl\bitrev.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\impl\dft-fft.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\impl\dft-impl.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\impl\dft-templates.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\impl\fft-impl.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\impl\fft-templates.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\impl\ft.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\data\bitrev.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\data\sincos.hpp">
+      <Filter>KFR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EQf.h" />
+    <ClInclude Include="..\IEQ.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="resources">
@@ -569,6 +702,9 @@
     <Filter Include="Q">
       <UniqueIdentifier>{2195e108-7f1a-4399-a4a0-753e0bb2779a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KFR">
+      <UniqueIdentifier>{93c46e7c-2732-4f9b-abc1-7a53f1f14195}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\resources\main.rc">
@@ -591,5 +727,8 @@
     <None Include="..\..\..\Q Lib Stipped\.gitattributes">
       <Filter>Q</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\resources\Trippy.ico" />
   </ItemGroup>
 </Project>

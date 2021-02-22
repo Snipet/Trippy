@@ -118,7 +118,7 @@
     <IntDir>$(SolutionDir)build-win\vst3\$(Platform)\$(Configuration)\int\</IntDir>
     <LinkIncremental />
     <TargetExt>.vst3</TargetExt>
-    <IncludePath>C:\data\iPlug2\Q Lib Stipped;$(IncludePath)</IncludePath>
+    <IncludePath>C:\data\iPlug2\kfr-master\include\kfr;C:\data\iPlug2\Q Lib Stipped;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)build-win\vst3\$(Platform)\$(Configuration)\</OutDir>
@@ -174,7 +174,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\data\iPlug2\Q Lib Stipped;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\data\iPlug2\Q Lib Stipped;C:\data\iPlug2\kfr-master\include\kfr;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -328,6 +328,45 @@
     <ClInclude Include="..\..\..\IPlug\VST3\IPlugVST3_Parameter.h" />
     <ClInclude Include="..\..\..\IPlug\VST3\IPlugVST3_ProcessorBase.h" />
     <ClInclude Include="..\..\..\IPlug\VST3\IPlugVST3_View.h" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\all.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\basic_expressions.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\conversion.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\expression.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\filter.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\fraction.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\function_expressions.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\generators.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\memory.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\pointer.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\random.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\reduce.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\small_buffer.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\sort.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\base\univector.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\array.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\cstring.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\ctti.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\function.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\memory.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\named_arg.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\numeric.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\range.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\result.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\string.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\cometa\tuple.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\cache.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\convolution.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\data\bitrev.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\data\sincos.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\fft.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\impl\bitrev.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\impl\dft-fft.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\impl\dft-impl.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\impl\dft-templates.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\impl\fft-impl.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\impl\fft-templates.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\impl\ft.hpp" />
+    <ClInclude Include="..\..\..\kfr-master\include\kfr\dft\reference_dft.hpp" />
     <ClInclude Include="..\..\..\Q Lib Stipped\allpass.hpp" />
     <ClInclude Include="..\..\..\Q Lib Stipped\antialiasing.hpp" />
     <ClInclude Include="..\..\..\Q Lib Stipped\assert.hpp" />
@@ -346,7 +385,6 @@
     <ClInclude Include="..\..\..\Q Lib Stipped\envelope_synth.hpp" />
     <ClInclude Include="..\..\..\Q Lib Stipped\fast_math.hpp" />
     <ClInclude Include="..\..\..\Q Lib Stipped\feature_detection.hpp" />
-    <ClInclude Include="..\..\..\Q Lib Stipped\fft.hpp" />
     <ClInclude Include="..\..\..\Q Lib Stipped\fractional_ring_buffer.hpp" />
     <ClInclude Include="..\..\..\Q Lib Stipped\frequency.hpp" />
     <ClInclude Include="..\..\..\Q Lib Stipped\init_store.hpp" />
@@ -378,9 +416,13 @@
     <ClInclude Include="..\ADSRf.h" />
     <ClInclude Include="..\BiQuadCoeffs.h" />
     <ClInclude Include="..\BiquadFilterf.h" />
+    <ClInclude Include="..\EQf.h" />
     <ClInclude Include="..\IADSR.h" />
+    <ClInclude Include="..\IconsFontaudio.h" />
+    <ClInclude Include="..\IconsForkAwesome.h" />
     <ClInclude Include="..\ICustomDisplay.h" />
     <ClInclude Include="..\IDistortDisplay.h" />
+    <ClInclude Include="..\IEQ.h" />
     <ClInclude Include="..\IFilterDisplay.h" />
     <ClInclude Include="..\iLFOG.h" />
     <ClInclude Include="..\TransientProcessor.h" />
@@ -446,6 +488,11 @@
     <ClCompile Include="..\..\..\IPlug\IPlugTimer.cpp" />
     <ClCompile Include="..\..\..\IPlug\VST3\IPlugVST3.cpp" />
     <ClCompile Include="..\..\..\IPlug\VST3\IPlugVST3_ProcessorBase.cpp" />
+    <ClCompile Include="..\..\..\kfr-master\include\kfr\dft\impl\convolution-impl.cpp" />
+    <ClCompile Include="..\..\..\kfr-master\include\kfr\dft\impl\dft-impl-f32.cpp" />
+    <ClCompile Include="..\..\..\kfr-master\include\kfr\dft\impl\dft-impl-f64.cpp" />
+    <ClCompile Include="..\..\..\kfr-master\include\kfr\dft\impl\fft-impl-f32.cpp" />
+    <ClCompile Include="..\..\..\kfr-master\include\kfr\dft\impl\fft-impl-f64.cpp" />
     <ClCompile Include="..\Trippy.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -459,6 +506,9 @@
     <None Include="..\config\Trippy-win.props">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\resources\Trippy.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

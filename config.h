@@ -51,4 +51,6 @@
 #define APP_COPY_AUV3 0
 #define APP_SIGNAL_VECTOR_SIZE 64
 
+#define FONTAUDIO_FN "fontaudio.ttf"
+#define FORK_AWESOME_FN "forkawesome-webfont.ttf"
 #define ROBOTO_FN "Roboto-Regular.ttf"

@@ -12,6 +12,12 @@
 #include "ICustomDisplay.h"
 #include "BiquadFilterf.h"
 #include "IFilterDisplay.h"
+#include "all.hpp"
+#include "EQf.h"
+#include "IEQ.h"
+
+namespace k = kfr;
+
 const int kNumPresets = 1;
 
 enum EParams
@@ -30,6 +36,11 @@ enum EParams
   kFilterFoo,
   kFilterType,
   kVolumeGain,
+  kFilterOrder,
+  kFilterGain,
+  kFilterState,
+  kDistortionState,
+  kEQFoo,
   kNumParams
 };
 
@@ -54,7 +65,7 @@ public:
   void OnParamChange(int paramIdx) override;
   void OnIdle() override;
   void ProcessBlock(sample** inputs, sample** outputs, int nFrames) override;
-
+  bool OnMessage(int msgTag, int ctrlTag, int dataSize, const void* pData) override;
 
 
 private:
@@ -67,14 +78,32 @@ private:
   ISenderData<1> mFilterLastOutput = { kFilterDisplay, 1, 0 };
   TransientProcessor t;
   Filter* f;
+  Filter* f2;
+  Filter* f3;
   ADSRM adsr;
   int page;
-
   double* lastCutoff;
   double* lastReso;
+  double* lastGain;
+  EQ* eq;
+
 };
 
 
+class IEasyRect : public IControl
+{
+public:
+  IEasyRect(const IRECT& bounds, const IColor& color)
+    : IControl(bounds) {
+  }
+
+  void Draw(IGraphics& g) override {
+    g.FillRect(COLOR_WHITE, mRECT);
+  }
+
+private:
+  IColor color;
+};
 
 /*
 TODO / Good Ideas:

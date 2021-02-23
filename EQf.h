@@ -40,6 +40,7 @@ public:
     gains[actionBands + 1] = gain;
     freqs[actionBands + 1] = cutoff;
     q[actionBands + 1] = reso;
+    points[actionBands + 1][2] = 1;
     updateBand(actionBands + 1);
     actionBands++;
   }
@@ -63,12 +64,80 @@ public:
     }
   }
 
+  void removeBand(int band) {
+    gains[band] = 0;
+    freqs[band] = 0;
+    points[band][2] = 0;
+    q[band] = 0;
+    reshiftArrays();
+  }
+
+
+  void reshiftArrays() {
+
+    bool repeatNeeded = true;
+
+    while (repeatNeeded) {
+
+      bool allOne = true;
+
+
+      for (int i = 0; i < 20; i++) {
+        //We are looking for the uid here because that tells us if there is anything on that band
+        if (points[i][2] == 0 && allOne) {
+          //This would be where the array stops
+          allOne = false;
+        }
+        else if (points[i][2] == 1 && !allOne) {
+          //There shouldn't be any more items in the array, but there's one here because something was deleted. So now we need to shift it.
+          gains[i - 1] = gains[i];
+          freqs[i - 1] = freqs[i];
+          q[i - 1] = q[i];
+          points[i - 1][0] = points[i][0];
+          points[i - 1][1] = points[i][1];
+          points[i - 1][2] = points[i][2];
+
+          gains[i] = 0;
+          freqs[i] = 0;
+          points[i][0] = 0;
+          points[i][1] = 0;
+          points[i][2] = 0;
+          q[i] = 0;
+
+          repeatNeeded = true;
+        }
+
+      }
+      int state = 0;
+      for (int x = 0; x < 20; x++) {
+        //Do a sweep to make sure everything fits
+        if (points[x][2] == 1 && state == 0) {
+          state = 1;
+        }
+        if (points[x][2] == 0 && state == 1) {
+          state = 2;
+          actionBands = x - 1;
+        }
+        if (points[x][2] == 1 && state == 2) {
+          state = 3; //This is bad
+        }
+      }
+      if (state != 1) {
+        repeatNeeded = false;
+      }
+      else {
+        repeatNeeded = true;
+      }
+    }
+  }
+
 private:
 
   void updateBand(int band) {
     getCoefs(coeffs[band], freqs[band], q[band], 4, 44100, gains[band]);
   }
 
+  float points[20][3];
   float gains[20];
   float freqs[20];
   float q[20];

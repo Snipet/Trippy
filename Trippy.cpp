@@ -289,7 +289,12 @@ bool Trippy::OnMessage(int msgTag, int ctrlTag, int dataSize, const void* pData)
     for (int i = 0; i < 2; i++) {
       eq[i].addBand(pConverted[0], pConverted[1], pConverted[2]);
     }
-
+    break;
+  case 2:
+    for (int i = 0; i < 2; i++) {
+      eq[i].removeBand(pConverted[0]);
+    }
+    break;
   }
 
 

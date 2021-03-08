@@ -1,2 +1,2 @@
 # Trippy
-Transient detection algorithm with extra steps :)
+Transient detection algorithm with extra steps
